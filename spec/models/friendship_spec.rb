@@ -11,7 +11,8 @@
 # Indexes
 #
 #  index_friendships_on_first_friend_id                       (first_friend_id)
-#  index_friendships_on_first_friend_id_and_second_friend_id  (first_friend_id,second_friend_id) UNIQUE
+#  index_friendships_on_first_friend_id_and_second_friend_id  (first_friend_id,
+#                                                              second_friend_id) UNIQUE
 #  index_friendships_on_second_friend_id                      (second_friend_id)
 #
 require 'rails_helper'

@@ -22,6 +22,15 @@ class User < ApplicationRecord
                                   dependent: :destroy
   has_many :received_friends, through: :received_friendships, source: :first_friend
 
+  has_many :sent_payments, class_name: 'Payment', foreign_key: :sender_id,
+                           inverse_of: :sender_id,
+                           dependent: :destroy
+  has_many :received_payments, class_name: 'Payment', foreign_key: :receiver_id,
+                               inverse_of: :receiver_id,
+                               dependent: :destroy
+
+  has_one :payment_account, dependent: :destroy
+
   validates :username, uniqueness: true
   validates :username, presence: true
 end
