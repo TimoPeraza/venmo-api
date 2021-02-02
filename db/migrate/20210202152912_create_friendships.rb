@@ -7,6 +7,6 @@ class CreateFriendships < ActiveRecord::Migration[6.0]
       t.timestamps
     end
 
-    add_index :friendships, [:first_friend_id, :second_friend_id], unique: true
+    add_index :friendships, %i[first_friend_id second_friend_id], unique: true
   end
 end
