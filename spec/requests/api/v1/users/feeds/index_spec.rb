@@ -17,7 +17,13 @@ describe 'GET api/v1/users/:id/feeds', type: :request do
   let!(:payment_three) { create(:payment, sender: friend_of_friend, receiver: other_user) }
 
   subject(:get_feeds) do
-    get api_v1_user_feeds_path(user_id), as: :json
+    get api_v1_user_feeds_path(user_id), params: params
+  end
+
+  let(:params) do
+    {
+      page: 1
+    }
   end
 
   before do

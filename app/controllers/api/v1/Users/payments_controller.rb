@@ -8,7 +8,7 @@ module Api
                              payment_params[:amount],
                              payment_params[:description]).transfer_money
 
-          head :no_content
+          head :ok
         end
 
         private

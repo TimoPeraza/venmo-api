@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "db8a5dd5-c66f-4605-936a-5d201fe4908f",
+		"name": "Venmo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "{{url}}/api/v1/users/1/balance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/v1/users/1/balance",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/v1/users/1/payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"payment\": {\n\t\t\"friend_id\": 2,\n\t\t\"amount\": 300,\n\t\t\"description\": \"thanks for lend me money yesterday!\"\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/v1/users/1/payment",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/v1/users/1/feeds?page=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/v1/users/1/feeds?page=1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"1",
+						"feeds"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
