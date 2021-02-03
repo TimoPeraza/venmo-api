@@ -10,6 +10,9 @@ en:
       invalid_content_type: Invalid content type header
       missing_param: A required param is missing
       not_found: Couldn't find the record
+      payments:
+        not_users_friendship: 'Users are not friends'
+        negative_amount: 'The amount must be a positive value'
       models:
         friendships:
           uniqueness: 'This users are already friends'
