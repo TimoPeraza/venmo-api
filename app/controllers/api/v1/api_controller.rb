@@ -5,6 +5,7 @@ module Api
       rescue_from ActiveRecord::RecordInvalid,         with: :render_record_invalid
       rescue_from ActionController::ParameterMissing,  with: :render_parameter_missing
       rescue_from Payments::NotUsersFriendshipError,   with: :render_request_invalid
+      rescue_from Payments::NegativeAmountError,       with: :render_request_invalid
 
       def status
         render json: { online: true }
