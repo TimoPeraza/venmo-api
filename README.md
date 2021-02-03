@@ -56,19 +56,6 @@ This template comes with:
 - Set your mail sender in `config/initializers/devise.rb`
 - Config your timezone accordingly in `application.rb`.
 
-## Api Docs
-
-https://railsapibasers.docs.apiary.io/
-
-With [Rspec API Doc Generator](https://github.com/zipmark/rspec_api_documentation) you can generate the docs after writing the acceptance specs.
-
-Just run:
-
-`./bin/docs `
-
-An `apiary.apib` file will be generated at the root directory of the project.
-
-
 ## Code quality
 
 With `rake code_analysis` you can run the code analysis tool, you can omit rules with:
@@ -88,17 +75,52 @@ With `rake code_analysis` you can run the code analysis tool, you can omit rules
 
 <img src="venmo_model.png"
      alt="Venmo Model"
-     width="500" height="250"
+     width="750" height="500"
      align="middle"/>
 
 * Friendship concept was handled as a bidirectional association (e.g user_a and user_b friendship will be represented as only one Friendship table entry, whether user_a or user_b value is on first_friend or second_friend attribute will be exactly the same for the system.)
 
+* Feed was associated to a Payment to keep a unique feed by transaction between users.
+
 ## Api Docs
 
-<img src="api_docs.png"
-     alt="Api Docs"
-     width="500" height="250"
-     align="middle"/>
+<table>
+    <thead>
+        <tr>
+            <th>API</th>
+            <th>HTTP verb</th>
+            <th>URI</th>
+            <th>Request Parameters</th>
+            <th>Response</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Payment</td>
+            <td>POST</td>
+            <td><i>/user/{id}/payment</i></td>
+            <td><i><b>friend_id</b></i> (integer), <i><b>amount</b></i> (float), <i><b>description</b></i> (string)</td>
+            <td><b>Success</b>: return 200 code with empty body.<br>
+                <b>Failure</b>: return HTTP error code with error description.</td>
+        </tr>
+        <tr>
+            <td>Feed</td>
+            <td>GET</td>
+            <td><i>/user/{id}/feeds</i></td>
+            <td><i><b>page</b></i> (page_number for pagination, integer. If no page number in the params,       return first page by default. Each page contains at most 10 feed items.) </td>
+            <td><b>Success</b>: return 200 code, body contains a list of feed items.<br>
+                <b>Failure</b>: return HTTP error code with error description.</td>
+        </tr>
+        <tr>
+            <td>Balance check</td>
+            <td>GET</td>
+            <td><i>/user/{id}/balance</i></td>
+            <td>No parameters</td>
+            <td><b>Success</b>: return 200 code, body contains balance.<br>
+                <b>Failure</b>: return HTTP error code with error description.</td>
+        </tr>
+    </tbody>
+</table>
 
 ## Services
 

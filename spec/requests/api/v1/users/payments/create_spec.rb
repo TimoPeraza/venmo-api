@@ -1,18 +1,15 @@
 describe 'POST api/v1/users/:id/payment', type: :request do
   let!(:user) { create(:user) }
   let!(:friend) { create(:user) }
-  let!(:other_friend) { create(:user) }
+  let!(:other_user) { create(:user) }
   let!(:user_payment_account) { create(:payment_account, user: user) }
   let!(:friend_payment_account) { create(:payment_account, user: friend) }
-  let!(:other_friend_payment_account) { create(:payment_account, user: other_friend) }
+  let!(:other_user_payment_account) { create(:payment_account, user: other_user) }
   let!(:external_payment_source_one) { create(:external_payment_source, user: user) }
   let!(:external_payment_source_two) { create(:external_payment_source, user: friend) }
-  let!(:external_payment_source_three) { create(:external_payment_source, user: other_friend) }
+  let!(:external_payment_source_three) { create(:external_payment_source, user: other_user) }
   let!(:friendship_one) do
     create(:friendship, first_friend: user, second_friend: friend)
-  end
-  let!(:friendship_two) do
-    create(:friendship, first_friend: user, second_friend: other_friend)
   end
 
   subject(:create_payment) do
@@ -53,8 +50,8 @@ describe 'POST api/v1/users/:id/payment', type: :request do
                                                                                          .to(1050)
           end
 
-          it 'does not change other friend balance' do
-            expect { create_payment }.not_to change { other_friend_payment_account.reload.balance }
+          it 'does not change other user balance' do
+            expect { create_payment }.not_to change { other_user_payment_account.reload.balance }
           end
 
           it 'creates a payment with the expected sender' do
@@ -111,8 +108,19 @@ describe 'POST api/v1/users/:id/payment', type: :request do
         let(:amount) { -100 }
 
         it 'returns a bad request' do
-          expect { create_payment }.to raise_error(Payments::NegativeAmountError)
+          create_payment
+          expect(response).to have_http_status(:bad_request)
         end
+      end
+    end
+
+    context 'when is not their friend' do
+      let(:friend_id) { other_user.id }
+      let(:amount) { 550 }
+
+      it 'returns a bad request' do
+        create_payment
+        expect(response).to have_http_status(:bad_request)
       end
     end
 
