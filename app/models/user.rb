@@ -36,4 +36,8 @@ class User < ApplicationRecord
 
   validates :username, uniqueness: true
   validates :username, presence: true
+
+  def friends_and_me_ids
+    [id] + sent_friends.ids + received_friends.ids
+  end
 end

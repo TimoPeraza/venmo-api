@@ -68,6 +68,21 @@ describe 'POST api/v1/users/:id/payment', type: :request do
             create_payment
             expect(Payment.first.amount).to eql(amount.to_f)
           end
+
+          it 'generates a feed' do
+            expect { create_payment }.to change { Feed.count }.by(1)
+          end
+
+          it 'generates a feed with the expected message' do
+            create_payment
+            payment = Payment.first
+            expect(Feed.first.description).to eql(
+              I18n.t('api.models.feeds.description', user: user.username,
+                                                     friend: friend.username,
+                                                     timestamp: payment.created_at,
+                                                     description: payment.description)
+            )
+          end
         end
 
         context 'when the amount is less or equal than the user balance' do

@@ -8,13 +8,13 @@ describe 'GET api/v1/users/:id/balance', type: :request do
     let(:user_id) { user.id }
 
     it 'returns a successful response' do
-      subject
+      get_balance
       expect(response).to be_successful
     end
 
     it 'returns the payment_account info' do
-      subject
-      expect(json['payment_account']).to include_json(
+      get_balance
+      expect(json[:payment_account]).to include_json(
         balance: payment_account.balance
       )
     end
@@ -24,7 +24,7 @@ describe 'GET api/v1/users/:id/balance', type: :request do
     let(:user_id) { 0 }
 
     it 'returns a not found response' do
-      subject
+      get_balance
       expect(response).to have_http_status(:not_found)
     end
   end
