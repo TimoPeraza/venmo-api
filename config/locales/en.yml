@@ -16,3 +16,6 @@ en:
       models:
         friendships:
           uniqueness: 'This users are already friends'
+    models:
+      feeds:
+        description: "%{user} paid %{friend} on %{timestamp} - %{description}"

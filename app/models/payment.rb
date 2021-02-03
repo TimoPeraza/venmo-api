@@ -24,4 +24,16 @@ class Payment < ApplicationRecord
   validates :amount, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0,
                                      less_than_or_equal_to: 1000 }
+
+  after_create :create_feed
+
+  private
+
+  def create_feed
+    feed_description = I18n.t('api.models.feeds.description', user: sender.username,
+                                                              friend: receiver.username,
+                                                              timestamp: created_at,
+                                                              description: description)
+    Feed.create!(payment: self, description: feed_description)
+  end
 end
