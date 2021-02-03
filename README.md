@@ -1,32 +1,14 @@
-# Rails API Template
+# Venmo Api
 
-[![CircleCI](https://circleci.com/gh/rootstrap/rails_api_base.svg?style=svg)](https://circleci.com/gh/rootstrap/rails_api_base)
-[![Code Climate](https://codeclimate.com/github/rootstrap/rails_api_base/badges/gpa.svg)](https://codeclimate.com/github/rootstrap/rails_api_base)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/63de7f82c79f5fe82f46/test_coverage)](https://codeclimate.com/github/rootstrap/rails_api_base/test_coverage)
-
-Rails Api Base is a boilerplate project for JSON RESTful APIs. It follows the community best practices in terms of standards, security and maintainability, integrating a variety of testing and code quality tools. It's based on Rails 6 and Ruby 2.7.
-
-Finally, it contains a plug an play Administration console (thanks to [ActiveAdmin](https://github.com/activeadmin/activeadmin)).
+Venmo Api is a mobile payment service which allows friends to transfer money to each other. It also
+has some social features like show your friends’ payment activities as feed. It's based on Rails 6 and Ruby 2.6.5.
 
 ## Features
 
 This template comes with:
-- Schema
-  - Users table
-  - Admin users table
-- Endpoints
-  - Sign up with user credentials
-  - Sign in with user credentials
-  - Sign out
-  - Reset password
-  - Get and update user profile
-- Administration panel for users
-- Rspec tests
-- Code quality tools
-- API documentation following https://apiblueprint.org/
-- Docker support
-- Exception Tracking
-- RSpec API Doc Generator
+- Get the user balance
+- Send payment to a friend
+- Get feeds records
 
 ## How to use
 
@@ -37,40 +19,14 @@ This template comes with:
 1. `rails s`
 1. You can now try your REST services!
 
-## How to use with docker
-
-1. Have `docker` and `docker-compose` installed (You can check this by doing `docker -v` and `docker-compose -v`)
-2. Modify the following lines in the `database.yml` file:
-  ``` yaml
-  default: &default
-    adapter: postgresql
-    encoding: unicode
-    pool: 5
-    username: postgres
-    password: postgres
-    host: db
-    port: 5432
-  ```
-3. Generate a secret key for the app by running `docker-compose run --rm --entrypoint="" web rake secret`, copy it and add it in your environment variables.
-4. Run `docker-compose run --rm --entrypoint="" web rails db:create db:migrate`.
-   1. (Optional) Seed the database with an AdminUser for use with ActiveAdmin by running `docker-compose run --rm --entrypoint="" web rails db:seed`. The credentials for this user are: email: `admin@example.com` ; password: `password`.
-5. (Optional) If you want to deny access to the database from outside of the `docker-compose` network, remove the `ports` key in the `docker-compose.yml` from the `db` service.
-6. (Optional) Run the tests to make sure everything is working with: `docker-compose run --rm --entrypoint="" web rspec .`.
-7. Run the application with `docker-compose up`.
-8. You can now try your REST services!
-
 ## Gems
 
-- [ActiveAdmin](https://github.com/activeadmin/activeadmin) for easy administration
-- [Arctic Admin](https://github.com/cprodhomme/arctic_admin) for responsive active admin
 - [Annotate](https://github.com/ctran/annotate_models) for doc the schema in the classes
 - [Better Errors](https://github.com/charliesome/better_errors) for a better error page
 - [Brakeman](https://github.com/presidentbeef/brakeman) for static analysis security
 - [Bullet](https://github.com/flyerhzm/bullet) help to kill N+1
 - [Byebug](https://github.com/deivid-rodriguez/byebug) for debugging
 - [DelayedJob](https://github.com/collectiveidea/delayed_job) for background processing
-- [Devise](https://github.com/plataformatec/devise) for basic auth
-- [Devise Token Auth](https://github.com/lynndylanhurley/devise_token_auth) for api auth
 - [Dotenv](https://github.com/bkeepers/dotenv) for handling environment variables
 - [Draper](https://github.com/drapergem/draper) for decorators
 - [ExceptionHunter](https://github.com/rootstrap/exception_hunter) for exception tracking
@@ -79,7 +35,6 @@ This template comes with:
 - [Jbuilder](https://github.com/rails/jbuilder) for json views
 - [Letter Opener](https://github.com/ryanb/letter_opener) for previewing a mail in the browser
 - [Oj](https://github.com/ohler55/oj) for optimized json
-- [Pagy](https://github.com/ddnexus/pagy) for pagination
 - [Pry](https://github.com/pry/pry) for enhancing the ruby shell
 - [Puma](https://github.com/puma/puma) for the server
 - [Pundit](https://github.com/varvet/pundit) for authorization management
@@ -128,6 +83,32 @@ With `rake code_analysis` you can run the code analysis tool, you can omit rules
 1. After adding the project to CC, go to `Repo Settings`
 1. On the `Test Coverage` tab, copy the `Test Reporter ID`
 1. Set the current value of `CC_TEST_REPORTER_ID` in the [circle-ci project env variables](https://circleci.com/docs/2.0/env-vars/#setting-an-environment-variable-in-a-project)
+
+## Entity Relationship Diagram
+
+<img src="venmo_model.png"
+     alt="Venmo Model"
+     width="500" height="250"
+     align="middle"/>
+
+* Friendship concept was handled as a bidirectional association (e.g user_a and user_b friendship will be represented as only one Friendship table entry, whether user_a or user_b value is on first_friend or second_friend attribute will be exactly the same for the system.)
+
+## Api Docs
+
+<img src="api_docs.png"
+     alt="Api Docs"
+     width="500" height="250"
+     align="middle"/>
+
+## Services
+
+This project has 3 main services.
+
+* PaymentService handles the logic for creating a payment between two users. First it will validate that the receiver user is friend of the sender user and if the amount of money is a positive value, displaying the respective error message in case of failure. Then it will validate that the sender user's balance is equal or greater than the amount to transfer, if it's not it will proceed to call the service explained below. Finally if validations passed, a payment and a feed will be created.
+
+* Money Transfer Service mocks an external payment source connection which is called whenever a user tries to transfer an amount greater than his account's balance. The service will act as a successful request to an external party and will add the required value for the user to make the transfer.
+
+* FeedService will return all the payments that a given user should see on their feed. Such collection will be composed by his own payments plus his friends payments.
 
 ## Code Owners
 

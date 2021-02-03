@@ -5,6 +5,9 @@ describe 'POST api/v1/users/:id/payment', type: :request do
   let!(:user_payment_account) { create(:payment_account, user: user) }
   let!(:friend_payment_account) { create(:payment_account, user: friend) }
   let!(:other_friend_payment_account) { create(:payment_account, user: other_friend) }
+  let!(:external_payment_source_one) { create(:external_payment_source, user: user) }
+  let!(:external_payment_source_two) { create(:external_payment_source, user: friend) }
+  let!(:external_payment_source_three) { create(:external_payment_source, user: other_friend) }
   let!(:friendship_one) do
     create(:friendship, first_friend: user, second_friend: friend)
   end
