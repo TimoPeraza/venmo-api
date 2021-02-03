@@ -21,14 +21,15 @@ class Friendship < ApplicationRecord
 
   validate :friendship_uniqueness, on: %i[create update]
 
+  def self.exists_friendship(user, friend)
+    where(first_friend: user, second_friend: friend)
+      .or(Friendship.where(first_friend: friend, second_friend: user)).exists?
+  end
+
   private
 
   def friendship_uniqueness
-    users_friendship = Friendship.where(first_friend: first_friend, second_friend: second_friend)
-                                 .or(Friendship.where(first_friend: second_friend,
-                                                      second_friend: first_friend))
-
-    return unless users_friendship.exists?
+    return unless Friendship.exists_friendship(first_friend, second_friend)
 
     errors.add(:friendship, I18n.t('api.errors.models.friendships.uniqueness'))
   end

@@ -27,5 +27,6 @@ RSpec.describe User, type: :model do
     it { should have_many(:sent_friends).through(:sent_friendships) }
     it { should have_many(:received_friends).through(:received_friendships) }
     it { is_expected.to have_one(:payment_account) }
+    it { is_expected.to have_one(:external_payment_source) }
   end
 end

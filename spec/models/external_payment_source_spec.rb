@@ -1,21 +1,20 @@
 # == Schema Information
 #
-# Table name: payment_accounts
+# Table name: external_payment_sources
 #
 #  id         :bigint           not null, primary key
 #  user_id    :bigint           not null
-#  balance    :float            default(0.0), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 # Indexes
 #
-#  index_payment_accounts_on_user_id  (user_id)
+#  index_external_payment_sources_on_user_id  (user_id)
 #
 require 'rails_helper'
 
-RSpec.describe PaymentAccount, type: :model do
-  subject { build :payment_account }
+RSpec.describe ExternalPaymentSource, type: :model do
+  subject { build :external_payment_source }
 
   describe 'associations' do
     it { is_expected.to belong_to(:user) }

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :users, only: [] do
         scope module: 'users' do
           resource :balance, only: :show
+          resource :payment, only: :create
         end
       end
     end

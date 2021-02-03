@@ -30,6 +30,9 @@ class User < ApplicationRecord
                                dependent: :destroy
 
   has_one :payment_account, dependent: :destroy
+  has_one :external_payment_source, dependent: :destroy
+
+  delegate :balance, to: :payment_account, prefix: true
 
   validates :username, uniqueness: true
   validates :username, presence: true
